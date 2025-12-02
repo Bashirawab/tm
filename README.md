@@ -1,4 +1,4 @@
-# tm — lightweight ps/top-style viewer for Windows
+# tm — lightweight console Task Manager for Windows
 
 `tm` is a small C++20 command-line tool that mimics a BSD-style `ps`/`top` view on Windows. It enumerates processes, shows per-process CPU% (sampled over time), working-set memory, thread count, and parent PID, and can optionally terminate a process.
 
