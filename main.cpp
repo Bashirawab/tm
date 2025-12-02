@@ -12,7 +12,7 @@
 //  ════════════════════════════════════════════════════════════════════════  
 //                                                                            
 //  PROGRAM:     CONSOLE BASED TASK MANAGER                         
-//  MODULE:      MENU.C                                                       
+//  MODULE:      MAIN.CPP                                                       
 //  VERSION:     0.2                                                          
 //  DATE:        DECEMBER 2025                                                
 //                                                                            
