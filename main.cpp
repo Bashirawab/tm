@@ -1,3 +1,35 @@
+// ***************************************************************************
+//                                                                            
+//      ░██████████░███     ░███                                      
+//          ░██    ░████   ░████                                      
+//          ░██    ░██░██ ░██░██      ░███████  ░██    ░██  ░███████  
+//          ░██    ░██ ░████ ░██     ░██    ░██  ░██  ░██  ░██    ░██ 
+//          ░██    ░██  ░██  ░██     ░█████████   ░█████   ░█████████ 
+//          ░██    ░██       ░██     ░██         ░██  ░██  ░██        
+//          ░██    ░██       ░██ ░██  ░███████  ░██    ░██  ░███████  
+//                                                                    
+//                                                                            
+//  ════════════════════════════════════════════════════════════════════════  
+//                                                                            
+//  PROGRAM:     CONSOLE BASED TASK MANAGER                         
+//  MODULE:      MENU.C                                                       
+//  VERSION:     0.2                                                          
+//  DATE:        DECEMBER 2025                                                
+//                                                                            
+//  ════════════════════════════════════════════════════════════════════════  
+//                                                                            
+//  DESCRIPTION:                                                              
+//                                                                            
+//    main processes options, spawns top mode or single snapshot, and 
+//    handles process termination requests.                                      
+//                                                                            
+//  ════════════════════════════════════════════════════════════════════════  
+//                                                                            
+//  AUTHOR:      DAVE PLUMMER AND VARIOUS AI ASSISTS                                          
+//  LICENSE:     GPL 2.0                                                      
+//                                                                            
+// ***************************************************************************
+
 #define NOMINMAX
 #include <windows.h>
 #include <psapi.h>
@@ -21,6 +53,7 @@ struct Options {
     size_t maxProcs{0}; // 0 = auto-fit to console height
 };
 
+// Converts FILETIME to a 64-bit tick count.
 uint64_t fileTimeToUint64(const FILETIME &ft) {
     ULARGE_INTEGER li;
     li.LowPart = ft.dwLowDateTime;
@@ -28,6 +61,7 @@ uint64_t fileTimeToUint64(const FILETIME &ft) {
     return li.QuadPart;
 }
 
+// Reads total non-idle system time ticks for CPU% calculations.
 uint64_t readSystemTime() {
     FILETIME idle{}, kernel{}, user{};
     if (!GetSystemTimes(&idle, &kernel, &user)) {
@@ -39,6 +73,7 @@ uint64_t readSystemTime() {
     return (kernelTime + userTime) - idleTime;
 }
 
+// Converts wide strings to UTF-8 narrow strings.
 std::string narrow(const wchar_t *wstr) {
     if (!wstr) {
         return {};
@@ -52,6 +87,7 @@ std::string narrow(const wchar_t *wstr) {
     return result;
 }
 
+// Builds a readable Windows error message.
 std::string formatError(DWORD code) {
     LPWSTR buffer = nullptr;
     const DWORD flags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_IGNORE_INSERTS;
@@ -68,6 +104,7 @@ std::string formatError(DWORD code) {
     return result;
 }
 
+// Formats uptime in a friendly d/h/m/s string.
 std::string formatUptime(uint64_t milliseconds) {
     uint64_t totalSeconds = milliseconds / 1000;
     const uint64_t days = totalSeconds / 86400;
@@ -96,6 +133,7 @@ struct ProcessRow {
 // Tracks per-process CPU deltas between samples to approximate top-like CPU%.
 class ProcessSampler {
   public:
+    // Collects process info and computes CPU% based on previous sample.
     std::vector<ProcessRow> sample() {
         const uint64_t systemTime = readSystemTime();
         std::unordered_map<DWORD, uint64_t> currentTimes;
@@ -167,6 +205,7 @@ class ProcessSampler {
         return rows;
     }
 
+    // Returns number of processes seen in the last sample.
     size_t lastProcessCount() const { return lastProcessCount_; }
 
   private:
@@ -175,6 +214,7 @@ class ProcessSampler {
     size_t lastProcessCount_{0};
 };
 
+// Prints usage/help text.
 void printUsage(const char *exe) {
     std::cout << "Usage: " << exe << " [options]\n\n"
               << "  -t, --top             Refresh continuously (top mode)\n"
@@ -184,6 +224,7 @@ void printUsage(const char *exe) {
               << "  -h, -?, --help        Show this help\n";
 }
 
+// Parses seconds value and validates positivity.
 bool parseSeconds(const std::string &value, double &out) {
     try {
         out = std::stod(value);
@@ -193,6 +234,7 @@ bool parseSeconds(const std::string &value, double &out) {
     }
 }
 
+// Parses a PID as unsigned integer.
 bool parsePid(const std::string &value, DWORD &pid) {
     try {
         const unsigned long parsed = std::stoul(value);
@@ -203,6 +245,7 @@ bool parsePid(const std::string &value, DWORD &pid) {
     }
 }
 
+// Parses a positive count for row limiting.
 bool parseCount(const std::string &value, size_t &count) {
     try {
         const unsigned long parsed = std::stoul(value);
@@ -216,6 +259,7 @@ bool parseCount(const std::string &value, size_t &count) {
     }
 }
 
+// Terminates a process by PID with error reporting.
 bool killProcess(DWORD pid, std::string &error) {
     HANDLE handle = OpenProcess(PROCESS_TERMINATE, FALSE, pid);
     if (!handle) {
@@ -231,6 +275,7 @@ bool killProcess(DWORD pid, std::string &error) {
     return true;
 }
 
+// Prints the top-style summary header (uptime, mem, CPU count, procs).
 void printSummary(double intervalSeconds, size_t processCount) {
     SYSTEM_INFO sysInfo{};
     GetSystemInfo(&sysInfo);
@@ -260,6 +305,7 @@ void printSummary(double intervalSeconds, size_t processCount) {
               << " | Logical CPUs: " << sysInfo.dwNumberOfProcessors << "\n\n";
 }
 
+// Prints the process table up to maxRows entries.
 void printTable(const std::vector<ProcessRow> &rows, size_t maxRows) {
     std::cout << std::left << std::setw(7) << "PID"
               << std::setw(7) << "PPID"
@@ -282,6 +328,7 @@ void printTable(const std::vector<ProcessRow> &rows, size_t maxRows) {
     }
 }
 
+// Parses all CLI options and detects bad/ help cases.
 Options parseOptions(int argc, char *argv[], bool &showHelp, bool &badArgs) {
     Options opts{};
     bool secondsProvided = false;
@@ -360,6 +407,7 @@ Options parseOptions(int argc, char *argv[], bool &showHelp, bool &badArgs) {
     return opts;
 }
 
+// Reads the number of visible console rows (0 if unavailable).
 size_t detectConsoleRows() {
     const HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO info{};
@@ -370,6 +418,7 @@ size_t detectConsoleRows() {
     return rows > 0 ? static_cast<size_t>(rows) : 0;
 }
 
+// Determines how many process rows to show based on console and user cap.
 size_t resolveMaxRows(const Options &opts) {
     size_t rows = detectConsoleRows();
     // summary block (2 lines + trailing blank) + table header (2 lines) + one extra buffer row
@@ -392,6 +441,7 @@ size_t resolveMaxRows(const Options &opts) {
     return visibleCapacity;
 }
 
+// Runs a single snapshot: warm up sampling, wait briefly, then print.
 void renderOnce(ProcessSampler &sampler, double initialDelaySeconds, const Options &opts) {
     sampler.sample();
     std::this_thread::sleep_for(std::chrono::duration<double>(initialDelaySeconds));
@@ -401,6 +451,7 @@ void renderOnce(ProcessSampler &sampler, double initialDelaySeconds, const Optio
     printTable(rows, maxRows);
 }
 
+// Runs continuous top-style refresh until interrupted.
 void renderTop(ProcessSampler &sampler, double intervalSeconds, const Options &opts) {
     sampler.sample();
     while (true) {
@@ -413,6 +464,7 @@ void renderTop(ProcessSampler &sampler, double intervalSeconds, const Options &o
     }
 }
 
+// Entry point: parse options, handle kill, then render snapshot or top mode.
 int main(int argc, char *argv[]) {
     std::ios::sync_with_stdio(false);
 
